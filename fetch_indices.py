@@ -2,74 +2,57 @@ import yfinance as yf
 import requests
 import json
 
-# Mapeia os tickers que queremos para os tickers do Yahoo Finance
+
+# ALTERAÇÃO 1: Adicionamos o DVOL diretamente na lista principal.
+# O ticker dele no Yahoo Finance é 'BTC-DVOL.DB'
 tickers_map = {
     'SPX': '^GSPC',
     'DJI': '^DJI',
     'IXIC': '^IXIC',
     'RUT': '^RUT',
-    'VIX': '^VIX'
+    'VIX': '^VIX',
+    'DVOL': 'BTC-DVOL.DB'
 }
 
 output_data = {}
 
-# Busca os índices de mercado via Yahoo Finance
 try:
-    print("Buscando dados do Yahoo Finance...")
+    print("Buscando todos os dados via Yahoo Finance...")
     data = yf.Tickers(list(tickers_map.values()))
     
+    # Este loop agora busca TODOS os índices, incluindo o DVOL
     for key, yahoo_ticker in tickers_map.items():
-        info = data.tickers[yahoo_ticker].info
-        price = info.get('regularMarketPrice', 0)
-        previous_close = info.get('previousClose', 0)
+        # Usamos .download() para mais robustez em vez de .info
+        hist = data.tickers[yahoo_ticker].history(period="5d")
         
-        if price > 0 and previous_close > 0:
-            change_percent = ((price / previous_close) - 1) * 100
+        if not hist.empty:
+            # Pega o último preço disponível e o fechamento anterior
+            price = hist['Close'].iloc[-1]
+            previous_close = hist['Close'].iloc[-2] if len(hist['Close']) > 1 else price
+            
+            if price > 0 and previous_close > 0:
+                change_percent = ((price / previous_close) - 1) * 100
+            else:
+                change_percent = 0
+
+            output_data[key] = {
+                'price': round(price, 2),
+                'change': round(change_percent, 2)
+            }
+            print(f"  - {key}: Preço={price:.2f}, Variação={change_percent:.2f}%")
         else:
-            change_percent = 0
-
-        output_data[key] = {
-            'price': round(price, 2),
-            'change': round(change_percent, 2)
-        }
-        print(f"  - {key}: Preço={price}, Variação={change_percent:.2f}%")
+            print(f"  - {key}: Não foi possível obter dados.")
+            output_data[key] = {'price': 0, 'change': 0}
 
 except Exception as e:
-    print(f"Erro ao buscar dados do Yahoo Finance: {e}")
+    print(f"Ocorreu um erro geral ao buscar dados do Yahoo Finance: {e}")
+    # Garante que todos os tickers tenham uma entrada, mesmo em caso de erro
+    for key in tickers_map.keys():
+        if key not in output_data:
+            output_data[key] = {'price': 0, 'change': 0}
 
-# Busca o DVOL Index via Deribit
-try:
-    print("Buscando dados do DVOL na Deribit...")
-    
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-    }
-    
-    # ALTERAÇÃO 1: URL correta usando o endpoint /ticker e o instrument_name=BTC-DVOL
-    url = "https://www.deribit.com/api/v2/public/ticker?instrument_name=BTC-DVOL"
-    
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    deribit_data = response.json()
-    
-    # ALTERAÇÃO 2: Lógica correta para ler a resposta do endpoint /ticker
-    if 'result' in deribit_data and 'last_price' in deribit_data['result']:
-        dvol_price = deribit_data['result']['last_price']
-        output_data['DVOL'] = {
-            'price': round(dvol_price, 2),
-            'change': 0  # Este endpoint também não fornece a variação diária
-        }
-        print(f"  - DVOL: Preço={dvol_price}")
-    else:
-        output_data['DVOL'] = {'price': 0, 'change': 0}
-        print("  - DVOL: Chave 'last_price' não encontrada na resposta. Resposta da API:")
-        print(deribit_data)
-
-except Exception as e:
-    print(f"Erro ao buscar dados da Deribit: {e}")
-    if 'DVOL' not in output_data:
-        output_data['DVOL'] = {'price': 0, 'change': 0}
-
+# ALTERAÇÃO 2: REMOVEMOS completamente o bloco de código que tentava acessar a API da Deribit.
+# Agora tudo é feito de uma só vez pelo yfinance.
 
 # Escreve o resultado no arquivo JSON
 with open('indices.json', 'w') as f:
