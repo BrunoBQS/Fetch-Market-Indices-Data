@@ -40,23 +40,29 @@ except Exception as e:
 # Busca o DVOL Index via Deribit
 try:
     print("Buscando dados do DVOL na Deribit...")
-    # ALTERAÇÃO 1: A URL agora pede especificamente pelo 'btc_dvol'
-    response = requests.get('https://www.deribit.com/api/v2/public/get_index?currency=btc_dvol')
-    response.raise_for_status()
+    
+    # ADIÇÃO: Cabeçalho para simular um navegador e evitar bloqueios.
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    
+    # ALTERAÇÃO: A requisição agora inclui os 'headers'.
+    response = requests.get('https://www.deribit.com/api/v2/public/get_index?currency=btc_dvol', headers=headers)
+    response.raise_for_status() # Isso vai dar erro se a resposta for 4xx ou 5xx
     deribit_data = response.json()
     
-    # ALTERAÇÃO 2: A chave para ler o preço agora é 'btc_dvol'
     if 'result' in deribit_data and 'btc_dvol' in deribit_data['result']:
         dvol_price = deribit_data['result']['btc_dvol']
         output_data['DVOL'] = {
             'price': round(dvol_price, 2),
-            'change': 0 # Deribit API não fornece a variação diária
+            'change': 0
         }
         print(f"  - DVOL: Preço={dvol_price}")
     else:
-        # Se a chave btc_dvol não existir, preenche com 0 para não quebrar o app
         output_data['DVOL'] = {'price': 0, 'change': 0}
-        print("  - DVOL: Dado não encontrado na resposta da Deribit.")
+        # Adiciona um print para sabermos o que a API respondeu em caso de falha
+        print("  - DVOL: Chave 'btc_dvol' não encontrada na resposta. Resposta da API:")
+        print(deribit_data)
 
 except Exception as e:
     print(f"Erro ao buscar dados da Deribit: {e}")
