@@ -41,27 +41,28 @@ except Exception as e:
 try:
     print("Buscando dados do DVOL na Deribit...")
     
-    # ADIÇÃO: Cabeçalho para simular um navegador e evitar bloqueios.
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
     
-    # ALTERAÇÃO: A requisição agora inclui os 'headers'.
-    response = requests.get('https://www.deribit.com/api/v2/public/get_index?currency=btc_dvol', headers=headers)
-    response.raise_for_status() # Isso vai dar erro se a resposta for 4xx ou 5xx
+    # ALTERAÇÃO 1: URL correta usando o endpoint /ticker e o instrument_name=BTC-DVOL
+    url = "https://www.deribit.com/api/v2/public/ticker?instrument_name=BTC-DVOL"
+    
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
     deribit_data = response.json()
     
-    if 'result' in deribit_data and 'btc_dvol' in deribit_data['result']:
-        dvol_price = deribit_data['result']['btc_dvol']
+    # ALTERAÇÃO 2: Lógica correta para ler a resposta do endpoint /ticker
+    if 'result' in deribit_data and 'last_price' in deribit_data['result']:
+        dvol_price = deribit_data['result']['last_price']
         output_data['DVOL'] = {
             'price': round(dvol_price, 2),
-            'change': 0
+            'change': 0  # Este endpoint também não fornece a variação diária
         }
         print(f"  - DVOL: Preço={dvol_price}")
     else:
         output_data['DVOL'] = {'price': 0, 'change': 0}
-        # Adiciona um print para sabermos o que a API respondeu em caso de falha
-        print("  - DVOL: Chave 'btc_dvol' não encontrada na resposta. Resposta da API:")
+        print("  - DVOL: Chave 'last_price' não encontrada na resposta. Resposta da API:")
         print(deribit_data)
 
 except Exception as e:
