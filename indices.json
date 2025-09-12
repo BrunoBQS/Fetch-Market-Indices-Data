@@ -1,26 +1,26 @@
 {
     "SPX": {
-        "price": 6596.85,
-        "change": 0.14
+        "price": 6598.42,
+        "change": 0.17
     },
     "DJI": {
-        "price": 45953.6,
-        "change": -0.33
+        "price": 45925.88,
+        "change": -0.39
     },
     "IXIC": {
-        "price": 22153.82,
-        "change": 0.5
+        "price": 22178.83,
+        "change": 0.62
     },
     "RUT": {
-        "price": 2406.82,
-        "change": -0.61
+        "price": 2407.06,
+        "change": -0.6
     },
     "VIX": {
-        "price": 14.56,
-        "change": -1.02
+        "price": 14.55,
+        "change": -1.09
     },
     "BTC": {
-        "price": 116543.6,
-        "change": 0.9
+        "price": 116507.12,
+        "change": 0.87
     }
 }
