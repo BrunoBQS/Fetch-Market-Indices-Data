@@ -4,23 +4,23 @@
         "change": -0.03
     },
     "DJI": {
-        "price": 48406.3,
-        "change": -0.11
+        "price": 48392.6,
+        "change": -0.14
     },
     "IXIC": {
-        "price": 23466.43,
-        "change": -0.03
+        "price": 23466.08,
+        "change": -0.04
     },
     "RUT": {
-        "price": 2512.85,
-        "change": -0.28
+        "price": 2512.33,
+        "change": -0.3
     },
     "VIX": {
-        "price": 14.21,
-        "change": 0.07
+        "price": 14.25,
+        "change": 0.35
     },
     "BTC": {
-        "price": 88179.51,
-        "change": 1.2
+        "price": 88253.95,
+        "change": 1.28
     }
 }
