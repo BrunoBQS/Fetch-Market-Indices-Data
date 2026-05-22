@@ -12,15 +12,15 @@
         "change": 0.19
     },
     "RUT": {
-        "price": 2869.86,
-        "change": 0.93
+        "price": 2869.23,
+        "change": 0.91
     },
     "VIX": {
-        "price": 16.74,
-        "change": -0.12
+        "price": 16.7,
+        "change": -0.36
     },
     "BTC": {
-        "price": 75871.47,
-        "change": -2.15
+        "price": 75978.67,
+        "change": -2.01
     }
 }
