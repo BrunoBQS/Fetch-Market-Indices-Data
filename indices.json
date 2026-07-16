@@ -16,11 +16,11 @@
         "change": 0.39
     },
     "VIX": {
-        "price": 16.1,
-        "change": 2.74
+        "price": 15.95,
+        "change": 1.79
     },
     "BTC": {
-        "price": 64044.38,
-        "change": -1.03
+        "price": 64126.26,
+        "change": -0.91
     }
 }
