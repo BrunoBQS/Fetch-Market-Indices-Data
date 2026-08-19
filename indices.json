@@ -1,11 +1,11 @@
 {
     "SPX": {
-        "price": 7691.76,
-        "change": -0.69
+        "price": NaN,
+        "change": NaN
     },
     "DJI": {
-        "price": 53343.4,
-        "change": -0.22
+        "price": NaN,
+        "change": NaN
     },
     "IXIC": {
         "price": 26289.71,
@@ -20,7 +20,7 @@
         "change": 4.28
     },
     "BTC": {
-        "price": 64303.79,
-        "change": -0.31
+        "price": 64269.36,
+        "change": -0.37
     }
 }
