@@ -8,7 +8,7 @@
         "change": -1.21
     },
     "IXIC": {
-        "price": 25978.42,
+        "price": 25978.43,
         "change": -0.01
     },
     "RUT": {
@@ -16,11 +16,11 @@
         "change": -0.4
     },
     "VIX": {
-        "price": 17.71,
-        "change": 2.97
+        "price": 16.15,
+        "change": -8.81
     },
     "BTC": {
-        "price": 76460.49,
-        "change": 1.12
+        "price": 76442.34,
+        "change": 0.38
     }
 }
