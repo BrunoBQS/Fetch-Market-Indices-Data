@@ -4,7 +4,7 @@
         "change": 0.33
     },
     "DJI": {
-        "price": 52177.7,
+        "price": 52177.69,
         "change": 1.08
     },
     "IXIC": {
@@ -16,11 +16,11 @@
         "change": 1.38
     },
     "VIX": {
-        "price": 16.46,
-        "change": -2.43
+        "price": 16.03,
+        "change": -2.61
     },
     "BTC": {
-        "price": 82076.04,
-        "change": 0.63
+        "price": 82150.81,
+        "change": 0.01
     }
 }
